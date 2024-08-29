@@ -1,23 +1,22 @@
 import java.util.Scanner;
 
-enum OPE {
-  CREATE
-}
-
 public class Main {
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
     String input = "";
     
     boolean isLoop = true;
-    if(input.equalsIgnoreCase("exit")) {
+    if(input.equalsIgnoreCase("q")) {
       isLoop = false;
     }
 
 
     while(isLoop) {
       System.out.println("操作番号を選択してください");
-      System.out.println("アプリを終了するにはqを入力してください");
+      System.out.println("1: 表示");
+      System.out.println("2: 作成");
+      System.out.println("3: 削除");
+      System.out.println("q: 終了");
       
       input = sc.nextLine();
       
@@ -35,12 +34,12 @@ public class Main {
           break;
         
         default:
-          System.out.println("指定した操作は存在しません");
+          System.out.println("アプリを終了します\n");
           break;
       }
       
 
-      if(input.equalsIgnoreCase("exit")) {
+      if(input.equalsIgnoreCase("q")) {
         isLoop = false;
       }
 
@@ -48,7 +47,6 @@ public class Main {
       System.out.println("\n");
     }
     
-    System.out.println("アプリを終了します\n");
     
     sc.close();
   }
