@@ -37,14 +37,10 @@ public class Main {
         
         default:
           System.out.println("アプリを終了します\n");
+          isLoop = false;
           break;
       }
       
-
-      if(input.equalsIgnoreCase("4")) {
-        isLoop = false;
-      }
-
       
       System.out.println("\n");
     }
@@ -74,7 +70,8 @@ public class Main {
         // }
       }
     } catch(IOException e) {
-      e.printStackTrace();
+      System.out.println("指定されたファイルが見つかりません");
+      // e.printStackTrace();
     }
   }
   
