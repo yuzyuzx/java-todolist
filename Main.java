@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.File;
 
 public class Main {
+  
+  public static final String TODO_CSV_FILE = "./data/todo.csv";
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
     String input = "";
@@ -22,7 +24,7 @@ public class Main {
       switch(input) {
         case "1":
           System.out.println("一覧表示");
-          showTask();
+          showTodo();
           break;
           
         case "2":
@@ -59,10 +61,9 @@ public class Main {
     System.out.println("4: 終了");
   }
   
-  private static void showTask() {
-    String filename = "data/todo.csv"; // 読み込むバイナリファイルのパス
+  private static void showTodo() {
 
-    try(Scanner sc = new Scanner(new File(filename))) {
+    try(Scanner sc = new Scanner(new File(TODO_CSV_FILE))) {
       while(sc.hasNextLine()) {
         String line = sc.nextLine();
         System.out.println("line: " + line);
