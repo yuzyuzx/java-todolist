@@ -1,11 +1,21 @@
-import java.util.Scanner;
-import java.io.IOException;
-import java.io.File;
+import java.util.*;
+import java.io.*;
 
 public class Main {
   
   public static final String TODO_CSV_FILE = "./data/todo.csv";
+
+  ArrayList<Todo> todolist = new ArrayList<>();
+  ArrayList<Todo> newTodolist = new ArrayList<>();
+
   public static void main(String[] args) {
+    
+    Main mainIns = new Main();
+    
+    mainIns.show();
+    mainIns.post();
+    
+    /*
     Scanner sc = new Scanner(System.in);
     String input = "";
     
@@ -23,7 +33,7 @@ public class Main {
       switch(input) {
         case "1":
           System.out.println("一覧表示");
-          showTodo();
+          show();
           break;
           
         case "2":
@@ -46,6 +56,7 @@ public class Main {
     
     
     sc.close();
+    */
   }
   
   private static void showOperation() {
@@ -56,24 +67,80 @@ public class Main {
     System.out.println("4: 終了");
   }
   
-  private static void showTodo() {
+  private void show() {
+
+    // TODO:読み込むのは別メソッドにする
     try(Scanner sc = new Scanner(new File(TODO_CSV_FILE))) {
       while(sc.hasNextLine()) {
         String line = sc.nextLine();
-        System.out.println("line: " + line);
-        // StringTokenizer st = new StringTokenizer(line, ",");
-        // while(st.hasMoreTokens()) {
-        //   String t = st.nextToken();
-        //   System.out.println(t);
-        // }
-      }
+        
+        String[] fields = line.split(",");
+        if(fields.length != 2) {
+          continue;
+        }
+        
+        Todo todo = new Todo(fields[0], fields[1]);
+        todolist.add(todo);
+      } // end while
+      
+      // for(Todo todo : todolist) {
+      //   System.out.println(todo.getId());
+      //   System.out.println(todo.getContent());
+      // }
+      
+
+
     } catch(IOException e) {
       System.out.println("指定されたファイルが見つかりません");
       // e.printStackTrace();
     }
   }
   
-  
-  
-  
+  private void post() {
+    
+      
+    for(Todo todo : todolist) {
+      System.out.println(todo.getId() + "," + todo.getContent());
+    }
+    
+    // 最新のIDを作成する
+    String newlastId = "1";
+    if(!todolist.isEmpty()) {
+      String currentLastId = todolist.get(todolist.size() - 1).getId();
+      try {
+        int number = Integer.parseInt(currentLastId) + 1;
+        newlastId = String.valueOf(number);
+      } catch(NumberFormatException e) {
+        System.out.println("IDの変換処理に失敗しました");
+      }
+    }
+    
+    System.out.println("NewLastID: " + newlastId);
+    
+
+    // 標準入力からデータを取得する
+    try(Scanner sc = new Scanner(System.in)) {
+      String input = sc.nextLine();
+      
+      // IDと入力データをカンマ区切りでファイルに書き込む
+      String content = String.join(",", newlastId, input);
+      System.out.println("post: " + content);
+
+      try(BufferedWriter bf = new BufferedWriter(
+        new FileWriter(TODO_CSV_FILE, true)
+      )) {
+        bf.write(content);
+        bf.write("\n");
+        System.out.println("入力内容を登録しました");
+        
+        // 新しい配列にデータを格納する
+        
+
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+        
+    }
+  }    
+
 }
