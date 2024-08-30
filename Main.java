@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.StringTokenizer;
 import java.io.IOException;
 import java.io.File;
 
@@ -58,7 +57,6 @@ public class Main {
   }
   
   private static void showTodo() {
-
     try(Scanner sc = new Scanner(new File(TODO_CSV_FILE))) {
       while(sc.hasNextLine()) {
         String line = sc.nextLine();
@@ -74,6 +72,7 @@ public class Main {
       // e.printStackTrace();
     }
   }
+  
   
   
   
