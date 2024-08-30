@@ -5,15 +5,16 @@ public class Main {
   
   public static final String TODO_CSV_FILE = "./data/todo.csv";
 
-  ArrayList<Todo> todolist = new ArrayList<>();
+  final ArrayList<Todo> todolist = new ArrayList<>();
   ArrayList<Todo> newTodolist = new ArrayList<>();
 
   public static void main(String[] args) {
     
     Main mainIns = new Main();
     
+    mainIns.storeTodoData();
     mainIns.show();
-    mainIns.post();
+    // mainIns.post();
     
     /*
     Scanner sc = new Scanner(System.in);
@@ -67,9 +68,7 @@ public class Main {
     System.out.println("4: 終了");
   }
   
-  private void show() {
-
-    // TODO:読み込むのは別メソッドにする
+  private void storeTodoData() {
     try(Scanner sc = new Scanner(new File(TODO_CSV_FILE))) {
       while(sc.hasNextLine()) {
         String line = sc.nextLine();
@@ -82,28 +81,24 @@ public class Main {
         Todo todo = new Todo(fields[0], fields[1]);
         todolist.add(todo);
       } // end while
-      
-      // for(Todo todo : todolist) {
-      //   System.out.println(todo.getId());
-      //   System.out.println(todo.getContent());
-      // }
-      
-
-
     } catch(IOException e) {
       System.out.println("指定されたファイルが見つかりません");
-      // e.printStackTrace();
+    }
+  }
+  
+  
+  
+  private void show() {
+    // TODO 表示方法変更する
+    for(Todo todo : todolist) {
+      System.out.println(todo.getId() + "," + todo.getContent());
     }
   }
   
   private void post() {
     
-      
-    for(Todo todo : todolist) {
-      System.out.println(todo.getId() + "," + todo.getContent());
-    }
-    
     // 最新のIDを作成する
+    // TODO メソッド化
     String newlastId = "1";
     if(!todolist.isEmpty()) {
       String currentLastId = todolist.get(todolist.size() - 1).getId();
@@ -115,29 +110,26 @@ public class Main {
       }
     }
     
-    System.out.println("NewLastID: " + newlastId);
-    
 
     // 標準入力からデータを取得する
     try(Scanner sc = new Scanner(System.in)) {
-      String input = sc.nextLine();
+      String content = sc.nextLine();
       
       // IDと入力データをカンマ区切りでファイルに書き込む
-      String content = String.join(",", newlastId, input);
-      System.out.println("post: " + content);
+      String writeContent = String.join(",", newlastId, content);
 
       try(BufferedWriter bf = new BufferedWriter(
         new FileWriter(TODO_CSV_FILE, true)
       )) {
-        bf.write(content);
+        bf.write(writeContent);
         bf.write("\n");
         System.out.println("入力内容を登録しました");
         
-        // 新しい配列にデータを格納する
-        
+      // storeに新規データを登録する
+      todolist.add(new Todo(newlastId, content));
 
       } catch (IOException e) {
-        e.printStackTrace();
+        System.out.println("登録に失敗しました");
       }
         
     }
