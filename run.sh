@@ -1,1 +1,1 @@
-javac *.java && java todo.Main
+javac *.java && java Main
