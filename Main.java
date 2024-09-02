@@ -5,16 +5,16 @@ public class Main {
   
   public static final String TODO_CSV_FILE = "./data/todo.csv";
 
-  final ArrayList<Todo> todolist = new ArrayList<>();
-  ArrayList<Todo> newTodolist = new ArrayList<>();
+  ArrayList<Todo> todolist = new ArrayList<>();
 
   public static void main(String[] args) {
     
     Main mainIns = new Main();
     
     mainIns.storeTodoData();
-    mainIns.show();
+    // mainIns.show();
     // mainIns.post();
+    mainIns.delete();
     
     /*
     Scanner sc = new Scanner(System.in);
@@ -112,6 +112,7 @@ public class Main {
     
 
     // 標準入力からデータを取得する
+    // TODO ファイル更新前にバックアップファイルを作る
     try(Scanner sc = new Scanner(System.in)) {
       String content = sc.nextLine();
       
@@ -134,5 +135,70 @@ public class Main {
         
     }
   }    
+  
+  /**
+   * 画面にファイルに記録しているデータを表示する
+   * 削除する番号を入力する
+   * 入力した番号を取得する
+   * storeから一致するデータを取得する
+   * storeから削除する
+   * IDを振り直してstoreを更新する
+   * ファイルに保存する
+   */
+  private void delete() {
+    // TODO 標準入力受付
+    
+    System.out.println("削除する番号を入力してください");
+
+    // 削除ID存在チェック
+    // TODO メソッド化する
+    String stringDeleteId = "3";
+    try {
+      int intDeleteId = Integer.parseInt(stringDeleteId) - 1;
+      if(intDeleteId < 0 || todolist.size() <= intDeleteId) {
+        throw new NumberFormatException();
+      }
+      todolist.remove(intDeleteId);
+    } catch(NumberFormatException e) {
+      System.out.println("入力した番号のデータは存在しません");
+      return;
+    }
+    
+    // storeを更新する
+    ArrayList<Todo> tmpTodo = new ArrayList<>();
+    for(int i = 0; i < todolist.size(); i++) {
+      String id = String.valueOf(i + 1);
+      String content = todolist.get(i).getContent();
+      tmpTodo.add(new Todo(id, content));
+    }
+
+    todolist = tmpTodo;
+    
+    // TODO 更新前にバックアップファイルを作る
+    // ファイルを空にする
+    try(FileWriter fw = new FileWriter(TODO_CSV_FILE, false)) {
+    } catch (IOException e) {
+      System.out.println("データファイルの更新処理に失敗しました");
+    }
+    
+    // データファイル更新処理
+    for(Todo todo : todolist) {
+
+      try(BufferedWriter bf = new BufferedWriter( new FileWriter(TODO_CSV_FILE, true))) {
+
+        String writeContent = String.join(
+          ",", todo.getId(), todo.getContent()
+        );
+
+        bf.write(writeContent);
+        bf.write("\n");
+        
+      } catch (IOException e) {
+        System.out.println("更新処理に失敗しました");
+      }
+
+    }
+    
+  }
 
 }
