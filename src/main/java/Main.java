@@ -3,7 +3,7 @@ import java.io.*;
 
 public class Main {
 
-  public static final String TODO_CSV_FILE = "./data/todo.csv";
+  public static final String TODO_CSV_FILE = "./src/main/resources/todo.csv";
 
   ArrayList<Todo> todolist = new ArrayList<>();
 
