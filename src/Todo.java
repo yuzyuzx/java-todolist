@@ -1,17 +1,17 @@
 public class Todo {
-  private String id;
-  private String content;
+  private final String id;
+  private final String title;
 
-  public Todo(String id, String content) {
+  public Todo(String id, String title) {
     this.id = id;
-    this.content = content;
+    this.title = title;
   }
 
   public String getId() {
     return id;
   }
 
-  public String getContent() {
-    return content;
+  public String getTitle() {
+    return title;
   }
 }
