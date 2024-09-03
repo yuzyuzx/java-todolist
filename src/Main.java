@@ -29,8 +29,8 @@ public class Main {
             break;
 
           default:
-            System.out.println("アプリを終了します\n");
             operation.endOperation();
+            System.out.println("アプリを終了します\n");
             break;
         }
 
